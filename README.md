@@ -1,6 +1,21 @@
-# StackSnap
+<p align="center">
+  <img src="logo.png" alt="StackSnap" width="200"/>
+</p>
 
-StackSnap is a lightweight compose snapshot tool for Docker Compose stacks.
+<h1 align="center">StackSnap</h1>
+
+<p align="center">
+  <a href="https://github.com/mortaljinx/stacksnap/releases/latest"><img src="https://img.shields.io/github/v/release/mortaljinx/stacksnap?label=version&style=flat-square" alt="Version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/mortaljinx/stacksnap?style=flat-square" alt="License"></a>
+  <a href="go.mod"><img src="https://img.shields.io/github/go-mod/go-version/mortaljinx/stacksnap?style=flat-square" alt="Go Version"></a>
+  <a href="https://hub.docker.com/r/mortaljinx/stacksnap"><img src="https://img.shields.io/docker/pulls/mortaljinx/stacksnap?style=flat-square" alt="Docker Pulls"></a>
+</p>
+
+<p align="center">A lightweight compose snapshot tool for Docker Compose stacks.</p>
+
+---
+
+
 
 It automatically:
 
