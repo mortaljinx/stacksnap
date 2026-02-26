@@ -1,0 +1,44 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  element:
+    image: vectorim/element-web:latest
+    restart: unless-stopped
+    ports:
+      - "3040:80"
+      - ":::3040:80"
+    volumes:
+      - "/mnt/nvme/docker/matrix/element/config.json:/app/config.json:rw"
+    environment:
+      NGINX_VERSION: "1.29.3"
+      PKG_RELEASE: "1"
+      DYNPKG_RELEASE: "1"
+      ELEMENT_WEB_PORT: "80"
+  matrix-postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/matrix/postgres:/var/lib/postgresql/data:rw"
+    environment:
+      POSTGRES_USER: "synapse"
+      POSTGRES_PASSWORD: "matrixpass"
+      POSTGRES_DB: "synapse"
+      POSTGRES_INITDB_ARGS: "--locale=C --encoding=UTF8"
+      GOSU_VERSION: "1.19"
+      PG_MAJOR: "15"
+      PG_VERSION: "15.15"
+      PG_SHA256: "5753aaeb8b09cbf61016f78aa69bf5cbdf01b43263f010cbf168c82896213aaa"
+      DOCKER_PG_LLVM_DEPS: "llvm19-dev 		clang19"
+      PGDATA: "/var/lib/postgresql/data"
+  matrix-synapse:
+    image: matrixdotorg/synapse:latest
+    restart: unless-stopped
+    ports:
+      - "8008:8008"
+      - ":::8008:8008"
+    volumes:
+      - "/mnt/nvme/docker/matrix/synapse:/data:rw"
+    environment:
+      GPG_KEY: "7169605F62C751356D054A26A821E680E5FA6305"
+      PYTHON_VERSION: "3.13.12"
+      PYTHON_SHA256: "2a84cd31dd8d8ea8aaff75de66fc1b4b0127dd5799aa50a64ae9a313885b4593"

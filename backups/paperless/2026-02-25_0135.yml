@@ -1,0 +1,11 @@
+services:
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+  worker:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+  db:
+    image: postgres:15-alpine
+  paperless-ai:
+    image: clusterzx/paperless-ai:latest
+  broker:
+    image: redis:7-alpine

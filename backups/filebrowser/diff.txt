@@ -1,0 +1,4 @@
+--- previous
++++ current
+@@ -1,36 +1,4 @@
+-version: "3.9"- services:   filebrowser:     image: filebrowser/filebrowser:latest-    container_name: filebrowser-    restart: unless-stopped -    ports:-      - "3030:80"--    networks:-      - ichor--    volumes:-      # Filebrowser internal data-      - /mnt/nvme/docker/filebrowser/database:/database-      - /mnt/nvme/docker/filebrowser/config:/config--      # YOUR mounts-      - /mnt/nvme/docker:/srv/docker-      - /mnt/nas/data:/srv/data--    environment:-      - PUID=1000-      - PGID=1000--    command: >-      --root /srv-      --database /database/filebrowser.db-      --config /config/settings.json--networks:-  ichor:-    external: true-

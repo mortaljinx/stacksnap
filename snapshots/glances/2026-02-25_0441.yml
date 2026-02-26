@@ -1,0 +1,16 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  glances:
+    image: nicolargo/glances:latest-full
+    restart: unless-stopped
+    ports:
+      - "4001:61208"
+      - ":::4001:61208"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/etc:/etc:ro"
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+    environment:
+      GLANCES_OPT: "-w"

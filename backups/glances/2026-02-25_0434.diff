@@ -1,0 +1,4 @@
+--- previous
++++ current
+@@ -1,4 +1,22 @@
++version: "3.8"+ services:   glances:     image: nicolargo/glances:latest-full+    container_name: glances +    restart: unless-stopped++    ports:+      - "4001:61208"   # ⭐ nice predictable port++    environment:+      - GLANCES_OPT=-w++    volumes:+      - /var/run/docker.sock:/var/run/docker.sock:ro+      - /etc:/etc:ro+      - /proc:/host/proc:ro+      - /sys:/host/sys:ro++    privileged: true

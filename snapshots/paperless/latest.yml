@@ -1,0 +1,87 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  broker:
+    image: redis:7-alpine
+    restart: unless-stopped
+    environment:
+      GOSU_VERSION: "1.17"
+      REDIS_VERSION: "7.4.7"
+      REDIS_DOWNLOAD_URL: "http://download.redis.io/releases/redis-7.4.7.tar.gz"
+      REDIS_DOWNLOAD_SHA: "c97e57b0df330a9e091cacff012bebe763c275398cf36ff44cdba876814b595b"
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/paperless/postgres:/var/lib/postgresql/data:rw"
+    environment:
+      POSTGRES_DB: "paperless"
+      POSTGRES_USER: "paperless"
+      POSTGRES_PASSWORD: "Mason180p!$"
+      GOSU_VERSION: "1.19"
+      PG_MAJOR: "15"
+      PG_VERSION: "15.15"
+      PG_SHA256: "5753aaeb8b09cbf61016f78aa69bf5cbdf01b43263f010cbf168c82896213aaa"
+      DOCKER_PG_LLVM_DEPS: "llvm19-dev 		clang19"
+      PGDATA: "/var/lib/postgresql/data"
+  paperless-ai:
+    image: clusterzx/paperless-ai:latest
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/paperless-ai:/app/data:rw"
+      - "/mnt/nvme/docker/paperless-ai-logs:/app/logs:rw"
+    environment:
+      PAPERLESS_API_URL: "https://docutal.mortalsrv.uk/api"
+      PAPERLESS_API_TOKEN: "CHANGE_ME"
+      NODE_VERSION: "22.21.1"
+      YARN_VERSION: "1.22.22"
+      NODE_ENV: "production"
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/paperless/data:/usr/src/paperless/data:rw"
+      - "/mnt/nvme/docker/paperless/export:/usr/src/paperless/export:rw"
+      - "/mnt/nvme/docker/paperless/media:/usr/src/paperless/media:rw"
+    environment:
+      PAPERLESS_USE_X_FORWARD_PROTO: "true"
+      PAPERLESS_URL: "https://docutal.mortalsrv.uk"
+      PAPERLESS_DBPASS: "Mason180p!$"
+      PAPERLESS_USE_X_FORWARD_HOST: "true"
+      PAPERLESS_DBHOST: "db"
+      PAPERLESS_REDIS: "redis://broker:6379"
+      PAPERLESS_CSRF_TRUSTED_ORIGINS: "https://docutal.mortalsrv.uk"
+      PAPERLESS_DBUSER: "paperless"
+      PAPERLESS_ALLOWED_HOSTS: "*"
+      PAPERLESS_TIME_ZONE: "Europe/London"
+      PAPERLESS_DBNAME: "paperless"
+      GPG_KEY: "7169605F62C751356D054A26A821E680E5FA6305"
+      PYTHON_VERSION: "3.12.12"
+      PYTHON_SHA256: "fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4"
+      UV_TOOL_BIN_DIR: "/usr/local/bin"
+      S6_BEHAVIOUR_IF_STAGE2_FAILS: "2"
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: "0"
+      S6_VERBOSITY: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+      PYTHONWARNINGS: "ignore:::django.http.response:517"
+      PNGX_CONTAINERIZED: "1"
+      UV_LINK_MODE: "copy"
+      UV_CACHE_DIR: "/cache/uv/"
+  worker:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    environment:
+      GPG_KEY: "7169605F62C751356D054A26A821E680E5FA6305"
+      PYTHON_VERSION: "3.12.12"
+      PYTHON_SHA256: "fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4"
+      UV_TOOL_BIN_DIR: "/usr/local/bin"
+      S6_BEHAVIOUR_IF_STAGE2_FAILS: "2"
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: "0"
+      S6_VERBOSITY: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+      PYTHONWARNINGS: "ignore:::django.http.response:517"
+      PNGX_CONTAINERIZED: "1"
+      UV_LINK_MODE: "copy"
+      UV_CACHE_DIR: "/cache/uv/"

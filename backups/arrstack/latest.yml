@@ -1,0 +1,256 @@
+version: "3.8"
+
+# ========================
+# TEMPLATES
+# ========================
+
+x-common-env: &common-env
+  PUID: ${PUID}
+  PGID: ${PGID}
+  TZ: ${TZ}
+  UMASK: ${UMASK}
+
+x-security: &security
+  security_opt:
+    - no-new-privileges:true
+  restart: unless-stopped
+
+x-watchtower: &watchtower
+  labels:
+    - com.centurylinklabs.watchtower.enable=true
+
+
+services:
+
+# ========================
+# CORE ARR
+# ========================
+
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    environment: *common-env
+    volumes:
+      - /mnt/nvme/docker/sonarr:/config
+      - /mnt/nas/data:/data
+      - /mnt/nvme/scripts:/scripts
+
+    ports:
+      - 3002:8989
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    environment: *common-env
+    volumes:
+      - /mnt/nvme/docker/radarr:/config
+      - /mnt/nas/data:/data
+      - /mnt/nvme/scripts:/scripts
+
+    ports:
+      - 3001:7878
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+  lidarr:
+    image: linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      <<: *common-env
+      METADATA_URL: https://api.musicinfo.pro/api/v0.4/
+    volumes:
+      - /mnt/nvme/docker/lidarr:/config
+      - /mnt/nas/data/media/music:/data/music
+      - /mnt/nas/data/media:/data/media               # Final media storage (NAS)
+      - /mnt/nas/data/torrents:/data/torrents
+      - /mnt/nas/data/usenet:/data/usenet
+    ports:
+      - 3003:8686
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+  bazarr:
+    image: linuxserver/bazarr:latest
+    container_name: bazarr
+    environment: *common-env
+    volumes:
+      - /mnt/nvme/docker/bazarr:/config
+      - /mnt/nas/data:/data
+    ports:
+      - 3004:6767
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+# ========================
+# SUPPORT APPS
+# ========================
+
+  autobrr:
+    image: ghcr.io/autobrr/autobrr:latest
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - /mnt/nvme/docker/autobrr:/config
+    ports:
+      - 3005:7474
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+  lazylibrarian:
+    image: linuxserver/lazylibrarian:latest
+    environment: *common-env
+    volumes:
+      - /mnt/nvme/docker/lazylibrarian:/config
+      - /mnt/nas/data:/data
+    ports:
+      - 3006:5299
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+  audiobookshelf:
+    image: advplyr/audiobookshelf:latest
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - /mnt/nvme/docker/audiobookshelf:/config
+      - /mnt/nas/data/media/audiobooks:/data/media
+      - /mnt/nas/data/usenet/completed:/books
+    ports:
+      - 3007:80
+    networks: [ichor]
+    restart: unless-stopped
+
+
+# ========================
+# EXTRA ARR
+# ========================
+
+  whisparr:
+    image: ghcr.io/thespad/whisparr:latest
+    environment: *common-env
+    volumes:
+      - /mnt/nvme/docker/whisparr/config:/config
+      - /mnt/nas/data:/data
+    ports:
+      - 3069:6969
+    networks: [ichor]
+    <<: *security
+
+
+  sportarr:
+    image: sportarr/sportarr:latest
+    environment: *common-env
+    volumes:
+      - /mnt/nvme/docker/sportarr:/config
+      - /mnt/nas/data/media:/data/media
+            # Final media storage (NAS)
+      - /mnt/nas/data:/data
+    ports:
+      - 3008:1867
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+  tracearr:
+    image: ghcr.io/connorgallopo/tracearr:supervised
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - /mnt/nvme/docker/tracearr:/config
+      - /mnt/nas/data/media:/data/media
+    ports:
+      - 3009:3000
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+  cleanuparr:
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    environment: *common-env
+    volumes:
+      - /mnt/nvme/docker/cleanuparr:/config
+    ports:
+      - 3010:11011
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+# ========================
+# AUTOMATION
+# ========================
+
+  unpackerr:
+    image: golift/unpackerr
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      UN_LOG_LEVEL: info
+      UN_INTERVAL: 30s
+      UN_START_DELAY: 60s
+      UN_PARALLEL: 2
+      UN_DELETE_ORIG: "true"
+
+      QBITTORRENT_0_PATHS_0: /data/torrents/completed
+    volumes:
+      - /mnt/nas/data:/data
+      - /mnt/nvme/docker/unpackerr:/config
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:latest
+    user: "${PUID}:${PGID}"
+    environment:
+      TZ: ${TZ}
+      RECYCLARR_CREATE_CONFIG: "true"
+      
+    volumes:
+      - /mnt/nvme/docker/recyclarr:/config
+    labels:
+      - "com.rehearsa.oneshot=true"  
+    networks: [ichor]
+    restart: "no"
+    <<: *watchtower
+
+
+  suggestarr:
+    image: ciuse99/suggestarr:latest
+    volumes:
+      - /mnt/nvme/docker/suggestarr:/app/config/config_files
+    ports:
+      - 3011:5000
+    networks: [ichor]
+    restart: unless-stopped
+    <<: *watchtower
+
+
+  huntarr:
+    image: huntarr/huntarr:latest
+    environment: *common-env
+    volumes:
+      - /mnt/nvme/docker/huntarr:/config
+    ports:
+      - 3012:9705
+    networks: [ichor]
+    <<: [*security, *watchtower]
+
+
+# ========================
+# NETWORKS (UNCHANGED)
+# ========================
+
+networks:
+  ichor:
+    external: true

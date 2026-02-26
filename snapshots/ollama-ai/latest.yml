@@ -1,0 +1,54 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/ollama:/root/.ollama:rw"
+    environment:
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_KEEP_ALIVE: "24h"
+      OLLAMA_NUM_THREADS: "8"
+      LD_LIBRARY_PATH: "/usr/local/nvidia/lib:/usr/local/nvidia/lib64"
+      NVIDIA_DRIVER_CAPABILITIES: "compute,utility"
+      NVIDIA_VISIBLE_DEVICES: "all"
+      OLLAMA_HOST: "0.0.0.0:11434"
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/openwebui:/app/backend/data:rw"
+    environment:
+      OLLAMA_BASE_URL: "http://ollama:11434"
+      GPG_KEY: "A035C8C19219BA821ECEA86B64E628F8D684696D"
+      PYTHON_VERSION: "3.11.14"
+      PYTHON_SHA256: "8d3ed8ec5c88c1c95f5e558612a725450d2452813ddad5e58fdb1a53b1209b78"
+      PYTHONUNBUFFERED: "1"
+      ENV: "prod"
+      PORT: "8080"
+      USE_OLLAMA_DOCKER: "false"
+      USE_CUDA_DOCKER: "false"
+      USE_SLIM_DOCKER: "false"
+      USE_CUDA_DOCKER_VER: "cu128"
+      USE_EMBEDDING_MODEL_DOCKER: "sentence-transformers/all-MiniLM-L6-v2"
+      USE_RERANKING_MODEL_DOCKER: ""
+      USE_AUXILIARY_EMBEDDING_MODEL_DOCKER: "TaylorAI/bge-micro-v2"
+      OPENAI_API_BASE_URL: ""
+      OPENAI_API_KEY: ""
+      WEBUI_SECRET_KEY: ""
+      SCARF_NO_ANALYTICS: "true"
+      DO_NOT_TRACK: "true"
+      ANONYMIZED_TELEMETRY: "false"
+      WHISPER_MODEL: "base"
+      WHISPER_MODEL_DIR: "/app/backend/data/cache/whisper/models"
+      RAG_EMBEDDING_MODEL: "sentence-transformers/all-MiniLM-L6-v2"
+      RAG_RERANKING_MODEL: ""
+      AUXILIARY_EMBEDDING_MODEL: "TaylorAI/bge-micro-v2"
+      SENTENCE_TRANSFORMERS_HOME: "/app/backend/data/cache/embedding/models"
+      TIKTOKEN_ENCODING_NAME: "cl100k_base"
+      TIKTOKEN_CACHE_DIR: "/app/backend/data/cache/tiktoken"
+      HF_HOME: "/app/backend/data/cache/embedding/models"
+      WEBUI_BUILD_VERSION: "2b26355002064228e9b671339f8f3fb9d1fafa73"
+      DOCKER: "true"

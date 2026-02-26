@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+
+  unbound:
+    image: mvance/unbound:latest
+    container_name: unbound
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - UNBOUND_PORT=5335   # ⭐ key fix
+
+
+  adguard:
+    image: adguard/adguardhome:latest
+    container_name: adguard
+    restart: unless-stopped
+    network_mode: host
+
+    volumes:
+      - /mnt/nvme/docker/adguard/work:/opt/adguardhome/work
+      - /mnt/nvme/docker/adguard/conf:/opt/adguardhome/conf
+
+    depends_on:
+      - unbound

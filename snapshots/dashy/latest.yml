@@ -1,0 +1,22 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  dashy:
+    image: lissy93/dashy:latest
+    restart: unless-stopped
+    ports:
+      - "5000:8080"
+      - ":::5000:8080"
+    volumes:
+      - "/mnt/nvme/docker/dashy/conf.yml:/app/public/conf.yml:rw"
+      - "/mnt/nvme/docker/dashy/data:/app/data:rw"
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/London"
+      NODE_ENV: "production"
+      NODE_VERSION: "20.11.1"
+      YARN_VERSION: "1.22.19"
+      PORT: "8080"
+      DIRECTORY: "/app"
+      IS_DOCKER: "true"

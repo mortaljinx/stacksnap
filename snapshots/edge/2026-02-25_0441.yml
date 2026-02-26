@@ -1,0 +1,44 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  authelia:
+    image: authelia/authelia:latest
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/authelia/config:/config:rw"
+    environment:
+      PUID: "0"
+      PGID: "0"
+      X_AUTHELIA_CONFIG: "/config/configuration.yml"
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/crowdsec/config:/etc/crowdsec:rw"
+      - "/mnt/nvme/docker/crowdsec/data:/var/lib/crowdsec/data:rw"
+      - "/mnt/nvme/docker/traefik/logs:/logs:ro"
+    environment:
+      COLLECTIONS: "crowdsecurity/traefik"
+      TZ: "Europe/London"
+  traefik:
+    image: traefik:latest
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "8080:8080"
+      - "80:80"
+      - ":::443:443"
+      - ":::8080:8080"
+      - ":::80:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/mnt/nvme/docker/traefik/acme.json:/acme.json:rw"
+      - "/mnt/nvme/docker/traefik/logs:/logs:rw"
+  traefik-bouncer:
+    image: fbonalair/traefik-crowdsec-bouncer:latest
+    restart: unless-stopped
+    environment:
+      LOG_LEVEL: "warn"
+      CROWDSEC_AGENT_HOST: "crowdsec:8080"
+      CROWDSEC_BOUNCER_API_KEY: "CHANGE_ME"
+      SSL_CERT_FILE: "/etc/ssl/certs/ca-certificates.crt"

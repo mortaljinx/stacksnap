@@ -1,0 +1,290 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  audiobookshelf:
+    image: advplyr/audiobookshelf:latest
+    restart: unless-stopped
+    ports:
+      - "3007:80"
+      - ":::3007:80"
+    volumes:
+      - "/mnt/nvme/docker/audiobookshelf:/config:rw"
+      - "/mnt/nas/data/media/audiobooks:/data/media:rw"
+      - "/mnt/nas/data/usenet/completed:/books:rw"
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/London"
+      NODE_VERSION: "20.19.6"
+      YARN_VERSION: "1.22.22"
+      PORT: "80"
+      NODE_ENV: "production"
+      CONFIG_PATH: "/config"
+      METADATA_PATH: "/metadata"
+      SOURCE: "docker"
+      NUSQLITE3_DIR: "/usr/local/lib/nusqlite3"
+      NUSQLITE3_PATH: "/usr/local/lib/nusqlite3/libnusqlite3.so"
+  autobrr:
+    image: ghcr.io/autobrr/autobrr:latest
+    restart: unless-stopped
+    ports:
+      - "3005:7474"
+      - ":::3005:7474"
+    volumes:
+      - "/mnt/nvme/docker/autobrr:/config:rw"
+    environment:
+      TZ: "Europe/London"
+      XDG_CONFIG_HOME: "/config"
+      XDG_DATA_HOME: "/config"
+  bazarr:
+    image: linuxserver/bazarr:latest
+    restart: unless-stopped
+    ports:
+      - "3004:6767"
+      - ":::3004:6767"
+    volumes:
+      - "/mnt/nvme/docker/bazarr:/config:rw"
+      - "/mnt/nas/data:/data:rw"
+    environment:
+      UMASK: "022"
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/London"
+      PS1: "$(whoami)@$(hostname):$(pwd)\$ "
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: "0"
+      S6_VERBOSITY: "1"
+      S6_STAGE2_HOOK: "/docker-mods"
+      VIRTUAL_ENV: "/lsiopy"
+      LSIO_FIRST_PARTY: "true"
+  cleanuparr:
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    restart: unless-stopped
+    ports:
+      - "3010:11011"
+      - ":::3010:11011"
+    volumes:
+      - "/mnt/nvme/docker/cleanuparr:/config:rw"
+    environment:
+      TZ: "Europe/London"
+      UMASK: "022"
+      PUID: "1000"
+      PGID: "1000"
+      APP_UID: "1654"
+      ASPNETCORE_HTTP_PORTS: "8080"
+      DOTNET_RUNNING_IN_CONTAINER: "true"
+      DOTNET_VERSION: "10.0.3"
+      ASPNET_VERSION: "10.0.3"
+      VIRTUAL_ENV: "/opt/apprise-venv"
+      HTTP_PORTS: "11011"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+  huntarr:
+    image: huntarr/huntarr:latest
+    restart: unless-stopped
+    ports:
+      - "3012:9705"
+      - ":::3012:9705"
+    volumes:
+      - "/mnt/nvme/docker/huntarr:/config:rw"
+    environment:
+      UMASK: "022"
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/London"
+      GPG_KEY: "7169605F62C751356D054A26A821E680E5FA6305"
+      PYTHON_VERSION: "3.12.12"
+      PYTHON_SHA256: "fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4"
+      PYTHONPATH: "/app"
+  lazylibrarian:
+    image: linuxserver/lazylibrarian:latest
+    restart: unless-stopped
+    ports:
+      - "3006:5299"
+      - ":::3006:5299"
+    volumes:
+      - "/mnt/nvme/docker/lazylibrarian:/config:rw"
+      - "/mnt/nas/data:/data:rw"
+    environment:
+      PGID: "1000"
+      TZ: "Europe/London"
+      UMASK: "022"
+      PUID: "1000"
+      LANGUAGE: "en_US.UTF-8"
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: "0"
+      S6_VERBOSITY: "1"
+      S6_STAGE2_HOOK: "/docker-mods"
+      VIRTUAL_ENV: "/lsiopy"
+      LSIO_FIRST_PARTY: "true"
+  lidarr:
+    image: linuxserver/lidarr:latest
+    restart: unless-stopped
+    ports:
+      - "3003:8686"
+      - ":::3003:8686"
+    volumes:
+      - "/mnt/nas/data/torrents:/data/torrents:rw"
+      - "/mnt/nas/data/usenet:/data/usenet:rw"
+      - "/mnt/nvme/docker/lidarr:/config:rw"
+      - "/mnt/nas/data/media/music:/data/music:rw"
+      - "/mnt/nas/data/media:/data/media:rw"
+    environment:
+      UMASK: "022"
+      METADATA_URL: "https://api.musicinfo.pro/api/v0.4/"
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/London"
+      PS1: "$(whoami)@$(hostname):$(pwd)\$ "
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: "0"
+      S6_VERBOSITY: "1"
+      S6_STAGE2_HOOK: "/docker-mods"
+      VIRTUAL_ENV: "/lsiopy"
+      LSIO_FIRST_PARTY: "true"
+      XDG_CONFIG_HOME: "/config/xdg"
+      COMPlus_EnableDiagnostics: "0"
+      TMPDIR: "/run/lidarr-temp"
+  radarr:
+    image: linuxserver/radarr:latest
+    restart: unless-stopped
+    ports:
+      - "3001:7878"
+      - ":::3001:7878"
+    volumes:
+      - "/mnt/nvme/docker/radarr:/config:rw"
+      - "/mnt/nas/data:/data:rw"
+      - "/mnt/nvme/scripts:/scripts:rw"
+    environment:
+      TZ: "Europe/London"
+      UMASK: "022"
+      PUID: "1000"
+      PGID: "1000"
+      PS1: "$(whoami)@$(hostname):$(pwd)\$ "
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: "0"
+      S6_VERBOSITY: "1"
+      S6_STAGE2_HOOK: "/docker-mods"
+      VIRTUAL_ENV: "/lsiopy"
+      LSIO_FIRST_PARTY: "true"
+      XDG_CONFIG_HOME: "/config/xdg"
+      COMPlus_EnableDiagnostics: "0"
+      TMPDIR: "/run/radarr-temp"
+  sonarr:
+    image: linuxserver/sonarr:latest
+    restart: unless-stopped
+    ports:
+      - "3002:8989"
+      - ":::3002:8989"
+    volumes:
+      - "/mnt/nvme/docker/sonarr:/config:rw"
+      - "/mnt/nas/data:/data:rw"
+      - "/mnt/nvme/scripts:/scripts:rw"
+    environment:
+      TZ: "Europe/London"
+      UMASK: "022"
+      PUID: "1000"
+      PGID: "1000"
+      PS1: "$(whoami)@$(hostname):$(pwd)\$ "
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: "0"
+      S6_VERBOSITY: "1"
+      S6_STAGE2_HOOK: "/docker-mods"
+      VIRTUAL_ENV: "/lsiopy"
+      LSIO_FIRST_PARTY: "true"
+      XDG_CONFIG_HOME: "/config/xdg"
+      SONARR_CHANNEL: "v4-stable"
+      SONARR_BRANCH: "main"
+      COMPlus_EnableDiagnostics: "0"
+      TMPDIR: "/run/sonarr-temp"
+  sportarr:
+    image: sportarr/sportarr:latest
+    restart: unless-stopped
+    ports:
+      - "3008:1867"
+      - ":::3008:1867"
+    volumes:
+      - "/mnt/nvme/docker/sportarr:/config:rw"
+      - "/mnt/nas/data/media:/data/media:rw"
+      - "/mnt/nas/data:/data:rw"
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/London"
+      UMASK: "022"
+      APP_UID: "1654"
+      ASPNETCORE_HTTP_PORTS: "8080"
+      DOTNET_RUNNING_IN_CONTAINER: "true"
+      DOTNET_VERSION: "8.0.23"
+      ASPNET_VERSION: "8.0.23"
+      LIBVA_DRIVER_NAME: "iHD"
+      Sportarr__DataPath: "/config"
+      ASPNETCORE_URLS: "http://*:1867"
+      ASPNETCORE_ENVIRONMENT: "Production"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: "false"
+  suggestarr:
+    image: ciuse99/suggestarr:latest
+    restart: unless-stopped
+    ports:
+      - "3011:5000"
+      - ":::3011:5000"
+    volumes:
+      - "/mnt/nvme/docker/suggestarr:/app/config/config_files:rw"
+    environment:
+      GPG_KEY: "7169605F62C751356D054A26A821E680E5FA6305"
+      PYTHON_VERSION: "3.13.12"
+      PYTHON_SHA256: "2a84cd31dd8d8ea8aaff75de66fc1b4b0127dd5799aa50a64ae9a313885b4593"
+      LOG_LEVEL: "info"
+      SUGGESTARR_PORT: "5000"
+  tracearr:
+    image: ghcr.io/connorgallopo/tracearr:supervised
+    restart: unless-stopped
+    ports:
+      - "3009:3000"
+      - ":::3009:3000"
+    volumes:
+      - "/mnt/nvme/docker/tracearr:/config:rw"
+      - "/mnt/nas/data/media:/data/media:rw"
+    environment:
+      TZ: "Europe/London"
+      NODE_ENV: "production"
+      LOG_LEVEL: "info"
+      PORT: "3000"
+      HOST: "0.0.0.0"
+      DATABASE_URL: "postgresql://tracearr:tracearr@127.0.0.1:5432/tracearr"
+      REDIS_URL: "redis://127.0.0.1:6379"
+      APP_VERSION: "v1.4.18"
+      APP_TAG: "supervised-v1.4.18"
+      APP_COMMIT: "57df343f03ac4d3db6ca57d58dcebe46fbf65d24"
+      APP_BUILD_DATE: "2026-02-14T01:28:34-05:00"
+  unpackerr:
+    image: golift/unpackerr
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nas/data:/data:rw"
+      - "/mnt/nvme/docker/unpackerr:/config:rw"
+    environment:
+      TZ: "Europe/London"
+      PGID: "1000"
+      UN_DELETE_ORIG: "true"
+      UN_LOG_LEVEL: "info"
+      UN_PARALLEL: "2"
+      UN_INTERVAL: "30s"
+      PUID: "1000"
+      UN_START_DELAY: "60s"
+      QBITTORRENT_0_PATHS_0: "/data/torrents/completed"
+  whisparr:
+    image: ghcr.io/thespad/whisparr:latest
+    restart: unless-stopped
+    ports:
+      - "3069:6969"
+      - ":::3069:6969"
+    volumes:
+      - "/mnt/nvme/docker/whisparr/config:/config:rw"
+      - "/mnt/nas/data:/data:rw"
+    environment:
+      PGID: "1000"
+      TZ: "Europe/London"
+      UMASK: "022"
+      PUID: "1000"
+      PS1: "$(whoami)@$(hostname):$(pwd)\$ "
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: "0"
+      S6_VERBOSITY: "1"
+      S6_STAGE2_HOOK: "/docker-mods"
+      VIRTUAL_ENV: "/lsiopy"
+      XDG_CONFIG_HOME: "/config/xdg"

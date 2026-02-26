@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  diun:
+    image: crazymax/diun:latest
+    container_name: diun
+    restart: unless-stopped
+    volumes:
+      - /mnt/nvme/docker/diun:/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - TZ=Europe/London
+      - DIUN_WATCH_SCHEDULE=0 */6 * * *
+      - DIUN_PROVIDERS_DOCKER=true
+      - DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT=true
+      - DIUN_NOTIF_WEBHOOK_ENDPOINT=http://smartarr-backend:8001/api/webhook/diun
+      - DIUN_NOTIF_WEBHOOK_METHOD=POST
+      - DIUN_NOTIF_WEBHOOK_HEADERS_CONTENT_TYPE=application/json
+      - DIUN_LOG_LEVEL=info
+    networks:
+      - ichor
+networks:
+  ichor:
+    external: true

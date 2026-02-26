@@ -1,0 +1,18 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/vaultwarden:/data:rw"
+    environment:
+      ROCKET_ENV: "production"
+      ROCKET_PORT: "8080"
+      ROCKET_WORKERS: "10"
+      SIGNUPS_ALLOWED: "true"
+      ADMIN_TOKEN: "$argon2id$v=19$m=65540,t=3,p=4$UEcxLEDGq1c1qplWVV+6CIYTIRpkIE6dRXAsBzdGDCk$Vl0Qn4/05RhPhe++lJhkkC29kjMxHPWNN+XnrhawT04"
+      ROCKET_SITE: "https://vault.mortalsrv.uk"
+      ROCKET_PROFILE: "release"
+      ROCKET_ADDRESS: "0.0.0.0"
+      DEBIAN_FRONTEND: "noninteractive"

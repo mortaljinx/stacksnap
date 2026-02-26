@@ -1,0 +1,16 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  restic:
+    image: instrumentisto/restic:latest
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker:/data:ro"
+      - "/mnt/nas/backups/restic-ubuntu:/repo:rw"
+      - "/mnt/nvme/scripts/restic-run.sh:/restic-run.sh:ro"
+    environment:
+      MATRIX_HS: "http://mortalsrv.li-fir.ts.net:8008"
+      RESTIC_REPOSITORY: "/repo"
+      RESTIC_PASSWORD: "hOYEsbbGv8IdpHxa/Y5mQFNrfw+vD+suJYeBfxlc+Ak="
+      MATRIX_TOKEN: "syt_YWxlcnRib3Q_yBfdeQUEmRONHmDhNnGa_4ckHuW"
+      MATRIX_ROOM: "!ytRGmlxGIDdFQtQLPm:matrix.mortalsrv.uk"

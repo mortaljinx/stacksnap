@@ -1,0 +1,11 @@
+services:
+  standardnotes_localstack:
+    image: localstack/localstack:latest
+  standardnotes_web:
+    image: standardnotes/web:latest
+  standardnotes:
+    image: standardnotes/server:latest
+  standardnotes_db:
+    image: postgres:16-alpine
+  standardnotes_redis:
+    image: redis:7-alpine

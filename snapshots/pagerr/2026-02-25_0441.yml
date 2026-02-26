@@ -1,0 +1,16 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  pagerr:
+    image: mortaljinx/pagerr:latest
+    restart: unless-stopped
+    ports:
+      - "10000:80"
+      - ":::10000:80"
+    environment:
+      NGINX_VERSION: "1.29.5"
+      PKG_RELEASE: "1"
+      DYNPKG_RELEASE: "1"
+      NJS_VERSION: "0.9.5"
+      NJS_RELEASE: "1"
+      ACME_VERSION: "0.3.1"

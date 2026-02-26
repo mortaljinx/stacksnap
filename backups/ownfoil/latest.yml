@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  ownfoil:
+    image: a1ex4/ownfoil
+    container_name: ownfoil
+    ports:
+      - "8465:8465"
+    volumes:
+      - /mnt/nvme/docker/ownfoil/config:/app/config
+      - /mnt/nas/data/torrents/switch:/games
+
+    restart: unless-stopped

@@ -1,0 +1,56 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    restart: unless-stopped
+    ports:
+      - "8096:8096"
+      - ":::8096:8096"
+    volumes:
+      - "/mnt/nas/data/media:/media:rw"
+      - "/mnt/nvme/docker/jellyfin/config:/config:rw"
+      - "/mnt/nvme/docker/jellyfin/cache:/cache:rw"
+    environment:
+      LIBVA_DRIVER_NAME: "iHD"
+      TZ: "Europe/London"
+      PUID: "1000"
+      PGID: "1000"
+      HEALTHCHECK_URL: "http://localhost:8096/health"
+      DEBIAN_FRONTEND: "noninteractive"
+      LANGUAGE: "en_US:en"
+      JELLYFIN_DATA_DIR: "/config"
+      JELLYFIN_CACHE_DIR: "/cache"
+      JELLYFIN_CONFIG_DIR: "/config/config"
+      JELLYFIN_LOG_DIR: "/config/log"
+      JELLYFIN_WEB_DIR: "/jellyfin/jellyfin-web"
+      JELLYFIN_FFMPEG: "/usr/lib/jellyfin-ffmpeg/ffmpeg"
+      XDG_CACHE_HOME: "/cache"
+      MALLOC_TRIM_THRESHOLD_: "131072"
+      NVIDIA_VISIBLE_DEVICES: "all"
+      NVIDIA_DRIVER_CAPABILITIES: "compute,video,utility"
+      LD_PRELOAD: "/usr/lib/jellyfin/libjemalloc.so.2"
+  jellyfinupdateposter:
+    image: iceshadow/jellyfinupdateposter:latest
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/jellyfin-update-poster:/mount:rw"
+    environment:
+      TMDB_API_KEY: "f88feb1409d53e70bac639a08b92e5ae"
+      TZ: "Europe/London"
+      JELLYFIN_URL: "http://jellyfin:8096"
+      JELLYFIN_API_KEY: "d53e311cf1e74b339a1d4ec2e19767b9"
+      GPG_KEY: "7169605F62C751356D054A26A821E680E5FA6305"
+      PYTHON_VERSION: "3.12.12"
+      PYTHON_SHA256: "fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4"
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    restart: unless-stopped
+    volumes:
+      - "/mnt/nvme/docker/jellyseerr:/app/config:rw"
+    environment:
+      TZ: "Europe/London"
+      PUID: "1000"
+      PGID: "1000"
+      NODE_VERSION: "22.18.0"
+      YARN_VERSION: "1.22.22"

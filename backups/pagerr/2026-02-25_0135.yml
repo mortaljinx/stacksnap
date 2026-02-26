@@ -1,0 +1,3 @@
+services:
+  pagerr:
+    image: mortaljinx/pagerr:latest

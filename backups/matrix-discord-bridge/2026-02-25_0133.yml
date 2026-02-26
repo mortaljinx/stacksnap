@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  matrix-discord-bridge:
+    image: halfshot/matrix-appservice-discord:latest
+    container_name: matrix-discord-bridge
+
+    volumes:
+      - /mnt/nvme/docker/matrix-discord-bridge/data:/data
+
+    restart: unless-stopped
+
+    networks:
+      - ichor
+
+networks:
+  ichor:
+    external: true

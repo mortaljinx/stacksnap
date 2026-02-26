@@ -1,0 +1,15 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    restart: unless-stopped
+    ports:
+      - "4002:3001"
+      - ":::4002:3001"
+    volumes:
+      - "/mnt/nvme/docker/uptime-kuma:/app/data:rw"
+    environment:
+      NODE_VERSION: "18.20.3"
+      YARN_VERSION: "1.22.19"
+      UPTIME_KUMA_IS_CONTAINER: "1"

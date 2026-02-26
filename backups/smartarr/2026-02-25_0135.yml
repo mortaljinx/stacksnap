@@ -1,0 +1,5 @@
+services:
+  smartarr-frontend:
+    image: nginx:alpine
+  smartarr-backend:
+    image: smartarr-smartarr-backend

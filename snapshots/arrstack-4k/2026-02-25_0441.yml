@@ -1,0 +1,27 @@
+# Reconstructed by StackSnap from running containers.
+# This is a best-effort snapshot — review before use.
+services:
+  radarr:
+    image: linuxserver/radarr:latest
+    restart: always
+    ports:
+      - "3021:7878"
+      - ":::3021:7878"
+    volumes:
+      - "/mnt/nvme/docker/radarr-4k:/config:rw"
+      - "/mnt/nas/data:/data:rw"
+      - "/mnt/nvme/scripts:/scripts:rw"
+    environment:
+      TZ: "Europe/London"
+      UMASK: "022"
+      PUID: "1000"
+      PGID: "1000"
+      PS1: "$(whoami)@$(hostname):$(pwd)\$ "
+      S6_CMD_WAIT_FOR_SERVICES_MAXTIME: "0"
+      S6_VERBOSITY: "1"
+      S6_STAGE2_HOOK: "/docker-mods"
+      VIRTUAL_ENV: "/lsiopy"
+      LSIO_FIRST_PARTY: "true"
+      XDG_CONFIG_HOME: "/config/xdg"
+      COMPlus_EnableDiagnostics: "0"
+      TMPDIR: "/run/radarr-temp"

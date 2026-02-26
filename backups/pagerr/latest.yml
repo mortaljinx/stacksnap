@@ -1,0 +1,14 @@
+services:
+  pagerr:
+    image: mortaljinx/pagerr:latest
+    container_name: pagerr
+    ports:
+      - "10000:80"
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -1,0 +1,101 @@
+version: "3.8"
+
+services:
+
+# ==========================================
+# Postgres
+# ==========================================
+  standardnotes_db:
+    image: postgres:16-alpine
+    container_name: standardnotes_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: standardnotes
+      POSTGRES_USER: snuser
+      POSTGRES_PASSWORD: CHANGE_ME_STRONG_PASSWORD
+    volumes:
+      - /mnt/nvme/docker/standardnotes/postgres:/var/lib/postgresql/data
+    networks:
+      - standardnotes_net
+
+
+# ==========================================
+# Redis
+# ==========================================
+  standardnotes_redis:
+    image: redis:7-alpine
+    container_name: standardnotes_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - /mnt/nvme/docker/standardnotes/redis:/data
+    networks:
+      - standardnotes_net
+
+
+# ==========================================
+# LocalStack
+# ==========================================
+  standardnotes_localstack:
+    image: localstack/localstack:latest
+    container_name: standardnotes_localstack
+    restart: unless-stopped
+    environment:
+      SERVICES: sns,sqs
+    networks:
+      - standardnotes_net
+
+
+# ==========================================
+# API Server (internal only)
+# ==========================================
+  standardnotes:
+    image: standardnotes/server:latest
+    container_name: standardnotes
+    restart: unless-stopped
+
+    environment:
+      NODE_ENV: production
+      DB_TYPE: postgres
+      DB_HOST: standardnotes_db
+      DB_PORT: 5432
+      DB_DATABASE: standardnotes
+      DB_USERNAME: snuser
+      DB_PASSWORD: CHANGE_ME
+
+    volumes:
+      - /mnt/nvme/docker/standardnotes/uploads:/opt/server/packages/files/dist/uploads
+      - /mnt/nvme/docker/standardnotes/logs:/var/lib/server/logs
+
+    depends_on:
+      - standardnotes_db
+      - standardnotes_redis
+      - standardnotes_localstack
+
+    networks:
+      - standardnotes_net
+
+
+# ==========================================
+# Web UI (DIRECT via Tailscale)
+# ==========================================
+  standardnotes_web:
+    image: standardnotes/web:latest
+    container_name: standardnotes_web
+    restart: unless-stopped
+
+    environment:
+      API_SERVER_URL: http://mortalsrv.li-fir.ts.net:3050
+
+    ports:
+      - "3050:80"   # ⭐ direct access like Element
+
+    networks:
+      - standardnotes_net
+
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  standardnotes_net:
