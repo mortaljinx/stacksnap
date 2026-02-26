@@ -1,0 +1,5 @@
+backups/
+snapshots/
+stacksnap
+stacksnap-linux-amd64
+stacksnap-linux-arm64

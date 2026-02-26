@@ -1,5 +1,0 @@
-services:
-  openwebui:
-    image: ghcr.io/open-webui/open-webui:main
-  ollama:
-    image: ollama/ollama:latest

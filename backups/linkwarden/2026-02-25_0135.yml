@@ -1,5 +1,0 @@
-services:
-  linkwarden:
-    image: ghcr.io/linkwarden/linkwarden:latest
-  linkwarden-db:
-    image: postgres:16-alpine

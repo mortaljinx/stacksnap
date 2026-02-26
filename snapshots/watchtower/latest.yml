@@ -1,8 +1,0 @@
-# Reconstructed by StackSnap from running containers.
-# This is a best-effort snapshot — review before use.
-services:
-  watchtower:
-    image: containrrr/watchtower
-    restart: unless-stopped
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:rw"

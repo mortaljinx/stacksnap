@@ -1,7 +1,0 @@
-services:
-  matrix-synapse:
-    image: matrixdotorg/synapse:latest
-  element:
-    image: vectorim/element-web:latest
-  matrix-postgres:
-    image: postgres:15-alpine

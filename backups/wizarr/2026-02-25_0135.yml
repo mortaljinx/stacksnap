@@ -1,3 +1,0 @@
-services:
-  wizarr:
-    image: ghcr.io/wizarrrr/wizarr:latest

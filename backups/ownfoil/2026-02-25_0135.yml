@@ -1,3 +1,0 @@
-services:
-  ownfoil:
-    image: a1ex4/ownfoil

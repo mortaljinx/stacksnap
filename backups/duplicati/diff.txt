@@ -1,4 +1,0 @@
---- previous
-+++ current
-@@ -1 +1,18 @@
-+version: "3.8" +services:+  duplicati:+    image: duplicati/duplicati+    container_name: duplicati+    restart: unless-stopped+    ports:+      - 8200:8200+    volumes:+      - /mnt/nvme/docker:/data/source/docker:ro+      - /var/lib/docker/volumes/portainer_data/_data:/data/source/portainer:ro+      - /mnt/nas/data/backup:/data/backup+    environment:+      - PUID=1000+      - PGID=1000++

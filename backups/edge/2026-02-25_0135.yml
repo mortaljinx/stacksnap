@@ -1,9 +1,0 @@
-services:
-  traefik:
-    image: traefik:latest
-  traefik-bouncer:
-    image: fbonalair/traefik-crowdsec-bouncer:latest
-  authelia:
-    image: authelia/authelia:latest
-  crowdsec:
-    image: crowdsecurity/crowdsec:latest
