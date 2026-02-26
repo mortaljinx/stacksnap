@@ -6,7 +6,7 @@
   <a href="go.mod"><img src="https://img.shields.io/github/go-mod/go-version/mortaljinx/stacksnap?style=flat-square" alt="Go Version"></a>
 </p>
 
-<p align="center">A lightweight compose snapshot tool for Docker Compose stacks.</p>
+<p align="center">StackSnap — Snapshot version history for Portainer stacks</p>
 
 ---
 
