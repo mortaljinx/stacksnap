@@ -1,5 +1,9 @@
+# Build artifacts
+stacksnap
+
+# Runtime output
 backups/
 snapshots/
-stacksnap
-stacksnap-linux-amd64
-stacksnap-linux-arm64
+
+# OS junk
+.DS_Store

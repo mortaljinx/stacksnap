@@ -10,7 +10,7 @@ import (
 
 // containerInspect mirrors the fields we care about from `docker inspect`.
 type containerInspect struct {
-	Name string `json:"Name"`
+	Name   string `json:"Name"`
 	Config struct {
 		Image  string            `json:"Image"`
 		Env    []string          `json:"Env"`
